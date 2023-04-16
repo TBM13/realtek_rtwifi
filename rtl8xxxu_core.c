@@ -4934,8 +4934,7 @@ error:
 	return;
 }
 
-static int rtl8xxxu_start_ap(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
-			     struct ieee80211_bss_conf *link_conf)
+static int rtl8xxxu_start_ap(struct ieee80211_hw *hw, struct ieee80211_vif *vif)
 {
 	struct rtl8xxxu_priv *priv = hw->priv;
 	struct device *dev = &priv->udev->dev;
@@ -5526,7 +5525,7 @@ static void rtl8xxxu_send_beacon_frame(struct ieee80211_hw *hw,
 				       struct ieee80211_vif *vif)
 {
 	struct rtl8xxxu_priv *priv = hw->priv;
-	struct sk_buff *skb = ieee80211_beacon_get(hw, vif, 0);
+	struct sk_buff *skb = ieee80211_beacon_get(hw, vif);
 	struct device *dev = &priv->udev->dev;
 	int retry;
 	u8 val8;
@@ -5631,7 +5630,7 @@ static void jaguar2_rx_parse_phystats_type1(struct rtl8xxxu_priv *priv,
 	bool parse_cfo = priv->fops->set_crystal_cap &&
 			 priv->vif &&
 			 priv->vif->type == NL80211_IFTYPE_STATION &&
-			 priv->vif->cfg.assoc &&
+			 priv->vif->bss_conf.assoc &&
 			 !crc_icv_err &&
 			 !ieee80211_is_ctl(hdr->frame_control) &&
 			 ether_addr_equal(priv->vif->bss_conf.bssid, hdr->addr2);
